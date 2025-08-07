@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 
 const LoginScreen = ({ navigation }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [secureText, setSecureText] = useState(true); 
 
   const handleLogin = async () => {
     try {
@@ -27,6 +28,7 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
+
       <TextInput
         placeholder="Email"
         style={styles.input}
@@ -35,13 +37,22 @@ const LoginScreen = ({ navigation }) => {
         autoCapitalize="none"
         keyboardType="email-address"
       />
-      <TextInput
-        placeholder="Password"
-        style={styles.input}
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+
+      <View style={styles.passwordContainer}>
+        <TextInput
+          placeholder="Password"
+          style={styles.passwordInput}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={secureText}
+        />
+        <TouchableOpacity onPress={() => setSecureText(!secureText)}>
+          <Text style={styles.toggle}>
+            {secureText ? 'Show' : 'Hide'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       <Button title="Login" onPress={handleLogin} />
     </View>
   );
@@ -64,6 +75,23 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     borderRadius: 5,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#aaa',
+    borderRadius: 5,
+    marginBottom: 10,
+    paddingRight: 10,
+  },
+  passwordInput: {
+    flex: 1,
+    padding: 10,
+  },
+  toggle: {
+    color: '#007BFF',
+    fontWeight: '600',
   },
 });
 
